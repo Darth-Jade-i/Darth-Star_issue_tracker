@@ -1,0 +1,70 @@
+### Issue: Unable to Update "Snap Store" Due to Running Apps
+
+**Problem Description:**
+When attempting to update the Snap Store using `snap refresh`, the update process fails with the following error message:
+```
+Unable to update "Snap Store": cannot refresh "snap-store": snap "snap-store" has running apps (ubuntu-software)
+```
+
+**Cause:**
+The error occurs because the Snap Store (`snap-store` snap) is currently being used by an application (in this case, `ubuntu-software`), which prevents the snap from being updated.
+
+**Environment:**
+- **Operating System:** Ubuntu 24.04 LTS
+- **Architecture:** 64-bit ARM
+
+**Date:** August 22, 2024
+
+**Steps to Resolve:**
+
+1. **Close the Application:**
+   - Ensure that all instances of `ubuntu-software` or any other applications using the Snap Store are closed. This can typically be done through the graphical user interface by quitting the application or closing its window.
+
+2. **Stop the Snap Store Snap:**
+   - If closing the application does not resolve the issue, manually stop the Snap Store snap by running the following command in the terminal:
+     ```bash
+     sudo snap stop snap-store
+     ```
+   - After stopping the snap, attempt the update again with:
+     ```bash
+     sudo snap refresh snap-store
+     ```
+
+3. **(Optional) Check for Running Processes:**
+   - If the issue persists, check for any remaining running processes related to the Snap Store and terminate them if necessary:
+     ```bash
+     ps aux | grep snap-store
+     ```
+   - Identify the process IDs (PIDs) and stop them using:
+     ```bash
+     sudo kill -9 <PID>
+     ```
+   - Replace `<PID>` with the actual process ID.
+
+4. **(Optional) Restart Snap Daemon:**
+   - Restarting the Snap daemon can sometimes resolve lingering issues:
+     ```bash
+     sudo systemctl restart snapd
+     ```
+   - Then, try updating again.
+
+5. **(Optional) Reboot the System:**
+   - If the problem is still unresolved, reboot your system to clear any lingering issues. After rebooting, check for updates:
+     ```bash
+     sudo snap refresh
+     ```
+
+6. **(Optional) Reinstall Snap Store Snap:**
+   - As a last resort, you can remove and then reinstall the Snap Store snap:
+     ```bash
+     sudo snap remove snap-store
+     sudo snap install snap-store
+     ```
+
+**Additional Notes:**
+- Ensure you have the latest version of Snapd installed.
+- Closing or stopping the Snap Store snap should be done cautiously to avoid data loss.
+
+---
+
+This should cover all the relevant details for future reference!
